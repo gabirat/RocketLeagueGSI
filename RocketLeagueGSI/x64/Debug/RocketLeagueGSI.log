@@ -1,0 +1,23 @@
+﻿  RocketLeagueGSIPlugin.cpp
+  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
+  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
+  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\linmath.h(56,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\linmath.h(57,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\linmath.h(58,1): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\linmath.h(341,16): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\xtgmath.h(24,46): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\wrapperstructs.h(305,94): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\cvarwrapper.h(20,2): warning C4251: 'CVarWrapper::pimpl': class 'std::unique_ptr<CVarWrapper::Impl,std::default_delete<CVarWrapper::Impl>>' needs to have dll-interface to be used by clients of class 'CVarWrapper'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\cvarwrapper.h(20): message : see declaration of 'std::unique_ptr<CVarWrapper::Impl,std::default_delete<CVarWrapper::Impl>>'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\CVarManagerWrapper.h(37,29): warning C4251: 'CVarManagerWrapper::pimpl': class 'std::unique_ptr<CVarManagerWrapper::Impl,std::default_delete<CVarManagerWrapper::Impl>>' needs to have dll-interface to be used by clients of class 'CVarManagerWrapper'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\wrappers\CVarManagerWrapper.h(37): message : see declaration of 'std::unique_ptr<CVarManagerWrapper::Impl,std::default_delete<CVarManagerWrapper::Impl>>'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\plugin\bakkesmodplugin.h(61,51): warning C4251: 'BakkesMod::Plugin::BakkesModPlugin::cvarManager': class 'std::shared_ptr<CVarManagerWrapper>' needs to have dll-interface to be used by clients of class 'BakkesMod::Plugin::BakkesModPlugin'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\plugin\bakkesmodplugin.h(61): message : see declaration of 'std::shared_ptr<CVarManagerWrapper>'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\plugin\bakkesmodplugin.h(62,44): warning C4251: 'BakkesMod::Plugin::BakkesModPlugin::gameWrapper': class 'std::shared_ptr<GameWrapper>' needs to have dll-interface to be used by clients of class 'BakkesMod::Plugin::BakkesModPlugin'
+C:\Program Files (x86)\Steam\steamapps\common\rocketleague\Binaries\Win64\bakkesmod\bakkesmodsdk\include\bakkesmod\plugin\bakkesmodplugin.h(62): message : see declaration of 'std::shared_ptr<GameWrapper>'
+     Creating library C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\x64\Debug\RocketLeagueGSI.lib and object C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\x64\Debug\RocketLeagueGSI.exp
+  RocketLeagueGSI.vcxproj -> C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\x64\Debug\RocketLeagueGSI.dll
+  C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\x64\Debug\RocketLeagueGSI.dll
+  1 File(s) copied

@@ -1,0 +1,13 @@
+﻿  GSI_Teasts.cpp
+  Please define _WIN32_WINNT or _WIN32_WINDOWS appropriately. For example:
+  - add -D_WIN32_WINNT=0x0601 to the compiler command line; or
+  - add _WIN32_WINNT=0x0601 to your project's Preprocessor Definitions.
+  Assuming _WIN32_WINNT=0x0601 (i.e. Windows 7 target).
+C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\exteternal_dependencies\Simple-Web-Server-master\client_http.hpp(305,54): error C2760: syntax error: unexpected token 'identifier', expected 'type specifier'
+C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\exteternal_dependencies\Simple-Web-Server-master\client_http.hpp(748): message : see reference to class template instantiation 'SimpleWeb::ClientBase<socket_type>' being compiled
+I:\boost_1_70_0\boost\asio\use_future.hpp(139): message : see reference to class template instantiation 'boost::asio::use_future_t<std::allocator<void>>::std_allocator_void' being compiled
+I:\boost_1_70_0\boost\asio\use_future.hpp(147): message : see reference to class template instantiation 'boost::asio::use_future_t<std::allocator<void>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\chrono(632): message : see reference to class template instantiation 'std::chrono::duration<double,std::ratio<1,1>>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\chrono(178): message : see reference to class template instantiation 'std::chrono::duration<__int64,std::nano>' being compiled
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\include\chrono(610): message : see reference to class template instantiation 'std::chrono::time_point<std::chrono::steady_clock,std::chrono::nanoseconds>' being compiled
+C:\Users\gabirat\Desktop\C++\RocketLeagueGSI\exteternal_dependencies\Simple-Web-Server-master\client_http.hpp(737,52): error C2760: syntax error: unexpected token 'identifier', expected 'type specifier'
