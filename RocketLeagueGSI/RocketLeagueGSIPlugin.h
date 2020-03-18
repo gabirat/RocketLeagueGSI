@@ -1,6 +1,6 @@
 #pragma once
 #pragma comment( lib, "bakkesmod.lib" )
-#include "Simple-Web-Server-master/server_http.hpp"
+#include <Simple-Web-Server-master\server_http.hpp>
 #include "bakkesmod/plugin/bakkesmodplugin.h"
 #include <nlohmann/json.hpp>
 
