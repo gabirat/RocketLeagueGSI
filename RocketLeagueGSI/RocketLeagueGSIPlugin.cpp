@@ -14,43 +14,25 @@ void RocketLeagueGSIPlugin::onLoad() {
 	cvarManager->registerNotifier("gsi_stop", std::bind(&RocketLeagueGSIPlugin::stopGSI, this, std::placeholders::_1), "Stops Gamestate Integration", PERMISSION_ALL);
 	cvarManager->registerNotifier("gsi_test", std::bind(&RocketLeagueGSIPlugin::testGSI, this, std::placeholders::_1), "xxx", PERMISSION_ALL);
 	//gameWrapper->HookEvent("Function TAGame.PRI_TA.OnScoredGoal", std::bind(&RocketLeagueGSIPlugin::onGoalScored, this, std::placeholders::_1));
-	cvarManager->registerCvar("gsi_port", "1337", "Port for the server to listen on");
-	cvarManager->registerCvar("gsi_address", "127.0.0.1", "Address for the server to listen on");
+	cvarManager->registerCvar("gsi_port", "1337", "Port of the server");
+	cvarManager->registerCvar("gsi_address", "127.0.0.1", "Listening server adress");
 	//gameWrapper->HookEventWithCaller("Function TAGame.GameEvent_Soccar_TA.EventGoalScored", std::bind(&RocketLeagueGSIPlugin::onGoalScored, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
-	//DOESN WORK ON OWNGOALS gameWrapper->HookEventWithCaller<PlayerControllerWrapper>("Function TAGame.GameEvent_Soccar_TA.EventPlayerScored", std::bind(&RocketLeagueGSIPlugin::onGoalScored, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+	//DOESN'T WORK ON OWNGOALS gameWrapper->HookEventWithCaller<PlayerControllerWrapper>("Function TAGame.GameEvent_Soccar_TA.EventPlayerScored", std::bind(&RocketLeagueGSIPlugin::onGoalScored, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	gameWrapper->HookEventWithCaller<PlayerControllerWrapper>("Function TAGame.PlayerController_TA.NotifyGoalScored", std::bind(&RocketLeagueGSIPlugin::onGoalScored, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 	//Params to callbacks can be found in files ex. NotifyGoalScored is a method in PlayerControllerWrapper and has arguments
 }
 void RocketLeagueGSIPlugin::onUnload() {
-	if (running) {
-		server.stop();
-		running = false;
-	}
+	
 }
 
 void RocketLeagueGSIPlugin::startGSI(std::vector<std::string> events) {
 	if (!running) {
-		unsigned int port = cvarManager->getCvar("gsi_port").getIntValue();
-		std::string address = cvarManager->getCvar("gsi_address").getStringValue();
-		server.config.address = address;
-		server.config.port = port;
+		server_port = cvarManager->getCvar("gsi_port").getIntValue();
+		server_adress = cvarManager->getCvar("gsi_address").getStringValue();
+		client = new HttpClient(std::string(server_adress + std::string(":") + std::to_string(server_port)));
 		running = true;
 
 		lastGoal["noGoalsYet"] = true;
-
-		server.resource["^/rlgsi$"]["GET"] = [this](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
-			auto content = request->content.string();
-			response->write(gameInfoToString());
-		};
-
-		server.on_error = [this](shared_ptr<HttpServer::Request> request, const SimpleWeb::error_code & ec) {
-			LOG(ec.message());
-		};
-
-		std::thread serverThread([&server = server]() {
-			server.start();
-		});
-		serverThread.detach();
 
 		std::thread updaterThread(&RocketLeagueGSIPlugin::update, this);
 		updaterThread.detach();
@@ -58,13 +40,13 @@ void RocketLeagueGSIPlugin::startGSI(std::vector<std::string> events) {
 }
 
 void RocketLeagueGSIPlugin::stopGSI(std::vector<std::string> events) {
-	server.stop();
 	running = false;
 }
 
 void RocketLeagueGSIPlugin::onGoalScored(PlayerControllerWrapper caller, void* params, std::string eventName) {
 	int scoredOnTeamIndex = *(int*)params;
 	int teamThatScored = scoredOnTeamIndex ? 0 : 1; //returns the other team
+	gameDataLock.lock();
 	lastGoal["noGoalsYet"] = false;
 	lastGoal["scoringTeamIndex"] = teamThatScored;
 	lastGoal["scoredOnTeamIndex"] = scoredOnTeamIndex;
@@ -84,22 +66,23 @@ void RocketLeagueGSIPlugin::onGoalScored(PlayerControllerWrapper caller, void* p
 			lastGoal["playerSteamID"] = playerPRI.GetUniqueId().ID;
 			auto playersTeam = playerPRI.GetTeam();
 			if (!playersTeam.IsNull()) {
-				int teamIdx = playersTeam.GetTeamIndex();
-				
+				int teamIdx = playersTeam.GetTeamIndex();	
 			}
 		}
 	}
+	gameDataLock.unlock();
 }
 
 void RocketLeagueGSIPlugin::update() {
 	using namespace std::chrono_literals;
 	while (running) {
+		gameDataLock.lock();
 		gameWrapper->Execute([&](GameWrapper * gw) {
 			//HERE GET ALL THE VALUES FROM THE GAME
-			
 			if (gw->IsInOnlineGame()) {
 				if (!gw->IsSpectatingInOnlineGame() && !gw->IsInReplay()) {
 					if (!gw->GetOnlineGame().IsNull()) {
+
 						nlohmann::json matchInfo;
 						matchInfo["inGame"] = true;
 						matchInfo["inOnlineGame"] = true;
@@ -351,12 +334,27 @@ void RocketLeagueGSIPlugin::update() {
 				gameInfo["matchInfo"]["inGame"] = false;
 			}
 		});
+		gameDataLock.unlock();
+		this->sendData();
 		std::this_thread::sleep_for(50ms); //UPDATE RATE
 	}
 }
 
 bool RocketLeagueGSIPlugin::isRunning() {
 	return running;
+}
+
+void RocketLeagueGSIPlugin::sendData() {
+	try {
+		auto res = client->request("POST", "/", gameInfoToString());
+		if (res->status_code != "200") {
+			this_thread::sleep_for(std::chrono::milliseconds(200));
+		}
+	}
+	catch (const SimpleWeb::system_error & e) {
+		LOG(std::string(std::string("Client request error: ") + std::string(e.what())));
+		this_thread::sleep_for(std::chrono::milliseconds(200));
+	}
 }
 
 void RocketLeagueGSIPlugin::testGSI(std::vector<std::string> events) {
@@ -368,5 +366,3 @@ void RocketLeagueGSIPlugin::testGSI(std::vector<std::string> events) {
 std::string RocketLeagueGSIPlugin::gameInfoToString() {
 	return gameInfo.dump();
 }
-
-
